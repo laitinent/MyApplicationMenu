@@ -1,7 +1,12 @@
 package fi.hamk.riksu.myapplication;
 
+import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +21,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.prefs.Preferences;
+
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView rv;
     //String s1[];
     MyAdapter myAdapter;
+    int msFor30min = 1000*60*30;
+    private Handler handler = new Handler();
+
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +41,35 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                getRoomReservations( prefs.getString("example_text", "Ri-KA-C214"));
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
+        //TODO: read prefs
+
+        String strRoom = prefs.getString("example_text", "Ri-KA-C214");
+        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, s) -> {
+            getRoomReservations( prefs.getString("example_text", "Ri-KA-C214"));
+        });
+
+        // TODO: test if needed
+        getRoomReservations(strRoom);
+    }
+
+    /**
+     * Get data from REST API and show in recycleview
+     * @param strRoom - Room to search for
+     */
+    private void getRoomReservations(String strRoom) {
         JSONArray rooms = new JSONArray();
-        rooms.put("Ri-KA-C214");  // TODO: example, get from settings
+        rooms.put(strRoom);//"Ri-KA-C214");  // TODO: example, get from settings
         /*
         * Example:
         * {
@@ -55,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // Search for given student group current week schedule
             jsonBody = new JSONObject();
-            jsonBody.put("startDate", "2018-05-06T13:30");//RecViewHelper.getCurrentDateString(0));
+            jsonBody.put("startDate", RecViewHelper.getCurrentDateString(0));
             jsonBody.put("endDate", RecViewHelper.getCurrentDateString(7));
             jsonBody.put("room", rooms);
         } catch (JSONException ex) {
@@ -72,7 +101,20 @@ public class MainActivity extends AppCompatActivity {
         );
 
         MySingleton.getInstance(this).addToRequestQueue(jsObjRequest);
+
+        handler.postDelayed(runnable, msFor30min);
     }
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            /* do what you need to do */
+            getRoomReservations( prefs.getString("example_text", "Ri-KA-C214"));
+            /* and here comes the "trick" */
+            handler.postDelayed(this, msFor30min);
+        }
+    };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

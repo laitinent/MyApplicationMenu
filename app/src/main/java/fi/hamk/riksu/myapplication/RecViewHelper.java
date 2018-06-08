@@ -41,7 +41,7 @@ public class RecViewHelper {
         //java.time.LocalDate today = java.time.LocalDate.now().plusDays(days); // API 26
         DateTime now = new DateTime().plusDays(days); // joda-time -kirjastosta
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm");
-        return fmt.print(now);
+        return fmt.print(now);//.split(".")[0];
         /*
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         //    sdf.setCalendar(calendar);

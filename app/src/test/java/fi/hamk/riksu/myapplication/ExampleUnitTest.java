@@ -14,4 +14,10 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+/*
+    @Test
+    public void dateFormat_isCorrect()
+    {
+        assertEquals("2018-06-06T13:30", RecViewHelper.getCurrentDateString(0));
+    }*/
 }
