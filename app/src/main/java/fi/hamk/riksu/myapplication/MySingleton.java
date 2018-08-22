@@ -6,7 +6,7 @@ package fi.hamk.riksu.myapplication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,14 +40,14 @@ public class MySingleton {
                 });
     }
 
-    public static synchronized MySingleton getInstance(Context context) {
+    static synchronized MySingleton getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new MySingleton(context);
         }
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
+    private RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
@@ -56,7 +56,7 @@ public class MySingleton {
         return mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
+    <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
 

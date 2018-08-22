@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler();
 
     SharedPreferences prefs;
+    String pref_key = "example_text";
+    String strDefaultRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +44,33 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        strDefaultRoom = getResources().getString(R.string.pref_default_display_name);//"RI-Ka-C214";
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getRoomReservations( prefs.getString("example_text", "Ri-KA-C214"));
+                GetReservationsFromPrefs();
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
         //TODO: read prefs
 
-        String strRoom = prefs.getString("example_text", "Ri-KA-C214");
+        //String strRoom = prefs.getString(pref_key, strDefaultRoom);
         prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, s) -> {
-            getRoomReservations( prefs.getString("example_text", "Ri-KA-C214"));
+            GetReservationsFromPrefs();
         });
 
         // TODO: test if needed
-        getRoomReservations(strRoom);
+        GetReservationsFromPrefs(); //getRoomReservations(strRoom);
+    }
+
+    /**
+     * Get reservations to fill rc view, with default parameter
+     */
+    private void GetReservationsFromPrefs() {
+        getRoomReservations( prefs.getString(pref_key, strDefaultRoom));
     }
 
     /**
@@ -109,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             /* do what you need to do */
-            getRoomReservations( prefs.getString("example_text", "Ri-KA-C214"));
+            GetReservationsFromPrefs();
             /* and here comes the "trick" */
             handler.postDelayed(this, msFor30min);
         }
