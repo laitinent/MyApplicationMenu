@@ -2,6 +2,7 @@
     <string name="app_name">Varausavustaja</string>
     <string name="action_settings">Asetukset</string>
     <string name="title_activity_settings">Asetukset</string>
+    <string name="item_time_prefix"> klo </string>
 
     <!-- Strings related to Settings -->
 

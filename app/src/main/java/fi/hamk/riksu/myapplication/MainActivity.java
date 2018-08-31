@@ -40,19 +40,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         rv = findViewById(R.id.recycler);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         strDefaultRoom = getResources().getString(R.string.pref_default_display_name);//"RI-Ka-C214";
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GetReservationsFromPrefs();
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
+        this.setTitle(prefs.getString(pref_key, strDefaultRoom));
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            GetReservationsFromPrefs();
+            //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         });
 
         //TODO: read prefs
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // Search for given student group current week schedule
             jsonBody = new JSONObject();
-            jsonBody.put("startDate", RecViewHelper.getCurrentDateString(0));
+            jsonBody.put("startDate", RecViewHelper.getCurrentDateString(-1));
             jsonBody.put("endDate", RecViewHelper.getCurrentDateString(7));
             jsonBody.put("room", rooms);
         } catch (JSONException ex) {
