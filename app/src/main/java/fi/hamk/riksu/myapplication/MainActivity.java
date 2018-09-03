@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // Search for given student group current week schedule
             jsonBody = new JSONObject();
-            jsonBody.put("startDate", RecViewHelper.getCurrentDateString(-1));
+            jsonBody.put("startDate", RecViewHelper.getCurrentDateString(0));
             jsonBody.put("endDate", RecViewHelper.getCurrentDateString(7));
             jsonBody.put("room", rooms);
         } catch (JSONException ex) {
