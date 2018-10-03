@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
              "startDate": "2018-05-06T13:30",
             "endDate": "2018-06-06T13:30",
             "room": [
-                "Ri-KA-C214"
+                "RI-Ka-C214"
             ]
             }
         * */
