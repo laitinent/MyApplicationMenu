@@ -20,7 +20,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     private Context c;
     //String s1[];// CUSTOM
     private Reservations reservations;
-    String timeprefix;
+    private String timeprefix;
 
     MyAdapter(Context ctx, Reservations reservations){       // s[]) {
         c = ctx;
@@ -42,15 +42,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         Reservation r = reservations.getReservations().get(position);
         List<ReservationResource> lista = r.getResources();
 
-        String strGroups="";
+        StringBuilder strGroups = new StringBuilder();
         for (ReservationResource rr: lista ) {
-            if(rr.getType().contains("student_group"))strGroups += (" "+rr.getName());
+            if(rr.getType().contains("student_group"))strGroups.append(" ").append(rr.getName());
         }
 
-        holder.tMore.setText(r.getSubject()+strGroups);// CUSTOMized
+        holder.tMore.setText(strGroups.insert(0, r.getSubject()).toString());// CUSTOMized
         StringBuilder s;
         s = new StringBuilder(RecViewHelper.formatDate(r.getStartDate()));
-        s.append(" "+timeprefix+" ");   //s.append(" klo ");
+        s.append(" ").append(timeprefix).append(" ");   //s.append(" klo ");
         s.append(RecViewHelper.formatDate(r.getStartDate(),false));
         s.append(" - ");
         s.append(RecViewHelper.formatDate(r.getEndDate(),false));// End date defaults same as start date

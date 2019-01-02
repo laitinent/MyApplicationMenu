@@ -12,6 +12,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 // import java.time // API 26
 //import java.time.LocalDateTime;
@@ -68,7 +69,7 @@ public class RecViewHelper {
     public static String formatDate(String preformatted, boolean... b) {
         DateTime startDate;
         DateTimeFormatter outfmt, outfmtTime;
-        boolean bUseDate = b.length>0? b[0]:true;
+        boolean bUseDate = b.length <= 0 || b[0];
         try {
             // Populate the data into the template view using the data object
             DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");// :ss lisätty
@@ -96,12 +97,15 @@ public class RecViewHelper {
         Toast.makeText(me, "Virhe: " + msg, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Test if code format matches HAMK student group code
+     * @param code - code to test
+     * @return - true on match
+     */
     public static boolean isStudentGroupCode(String code)
     {
-
         // INTINU15A6, INTIP17A6
         return code.matches("\\w\\w\\w\\w\\w\\d\\d\\w\\d|\\w\\w\\w\\w\\w\\w\\d\\d\\w\\d") ;
-
     }
 
     /**
@@ -117,12 +121,10 @@ public class RecViewHelper {
         // set title
 
         // set dialog message
-        try {
-            caption = new String(title.getBytes("ISO-8859-1"), "UTF-8");
-            subject = new String(message.getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+
+        caption = new String(title.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+        subject = new String(message.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
         alertDialogBuilder.setTitle(caption);
         alertDialogBuilder
                 .setMessage(subject)
