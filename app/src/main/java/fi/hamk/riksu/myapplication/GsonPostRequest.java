@@ -18,6 +18,7 @@ import com.google.gson.JsonSyntaxException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class GsonPostRequest<T> extends Request<T> {
     private final Class<T> clazz;
     private final Response.Listener<T> listener;
     //JSONObject jsonBody = new JSONObject();
-    String mRequestBody;
+    private String mRequestBody;
 
     /**
      * Make a POST request and return a parsed object from JSON.
@@ -63,12 +64,7 @@ public class GsonPostRequest<T> extends Request<T> {
 
     @Override
     public byte[] getBody() {
-        try {
-            return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-        } catch (UnsupportedEncodingException uee) {
-            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-            return null;
-        }
+        return mRequestBody == null ? null : mRequestBody.getBytes(StandardCharsets.UTF_8);
     }
 
     //
